@@ -1,8 +1,8 @@
-package com.dahuamiao;
+package com.cxq56.instrumentation.rocketmq.configuration;
 
 import brave.Tracing;
-import com.dahuamiao.trace.ConsumeMessageTraceHook;
-import com.dahuamiao.trace.SendMessageTraceHook;
+import com.cxq56.instrumentation.rocketmq.trace.ConsumeMessageTraceHook;
+import com.cxq56.instrumentation.rocketmq.trace.SendMessageTraceHook;
 import org.apache.rocketmq.client.impl.producer.DefaultMQProducerImpl;
 import org.apache.rocketmq.spring.autoconfigure.ListenerContainerConfiguration;
 import org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration;
@@ -62,9 +62,9 @@ public class RocketMqTracerConfiguration implements ApplicationContextAware, Bea
 
             DefaultMQProducerImpl defaultMQProducerImpl = rocketMQTemplate.getProducer().getDefaultMQProducerImpl();
 
-            TraceableExecutorService traceableExecutorService = new TraceableExecutorService(beanFactory, defaultMQProducerImpl.getAsyncSenderExecutor());
-
             defaultMQProducerImpl.registerSendMessageHook(sendMessageTraceHook);
+
+            TraceableExecutorService traceableExecutorService = new TraceableExecutorService(beanFactory, defaultMQProducerImpl.getAsyncSenderExecutor());
 
             defaultMQProducerImpl.setAsyncSenderExecutor(traceableExecutorService);
         }

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.dahuamiao.RocketMqTracerConfiguration
+com.cxq56.instrumentation.rocketmq.configuration.RocketMqTracerConfiguration
