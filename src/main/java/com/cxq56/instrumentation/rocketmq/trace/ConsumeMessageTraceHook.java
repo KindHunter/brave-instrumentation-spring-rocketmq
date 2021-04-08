@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * @program: SpringBoot_Dubbo_Example
+ * @program: brave-instrumentation-spring-rocketmq
  * @description:
  * @author: wangJun
  * @create: 2021-03-11 20:15

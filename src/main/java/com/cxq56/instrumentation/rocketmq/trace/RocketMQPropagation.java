@@ -4,7 +4,7 @@ import brave.propagation.Propagation;
 import org.apache.rocketmq.common.message.Message;
 
 /**
- * @program: SpringBoot_Dubbo_Example
+ * @program: brave-instrumentation-spring-rocketmq
  * @description:
  * @author: wangJun
  * @create: 2021-03-12 16:02
