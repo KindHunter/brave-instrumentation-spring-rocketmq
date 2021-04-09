@@ -49,6 +49,9 @@ public class ConsumeMessageTraceHook implements ConsumeMessageHook {
 
         MessageExt messageExt = msgList.get(0);
 
+        String traceId = messageExt.getProperty("X-B3-TraceId");
+        log.debug("traceId:{}, topic:{}, tag:{}", traceId, messageExt.getTopic(), messageExt.getTags());
+
         //默认情况下msgList的size都是1
         Span span = threadLocalSpan.next(extractor.extract(messageExt));
         span.name(messageExt.getTopic() + ":" + messageExt.getProperty("TAGS"));
