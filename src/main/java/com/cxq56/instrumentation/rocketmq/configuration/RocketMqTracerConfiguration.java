@@ -77,8 +77,11 @@ public class RocketMqTracerConfiguration implements BeanFactoryAware, SmartIniti
 
             defaultMQProducerImpl.setAsyncSenderExecutor(traceableExecutorService);
 
-            log.debug("defaultMQProducerImpl add SendMessageTraceHook");
+            log.info("defaultMQProducerImpl add SendMessageTraceHook");
 
+        } else {
+
+            log.info("rocketMQTemplate is null!");
         }
     }
 
@@ -96,7 +99,7 @@ public class RocketMqTracerConfiguration implements BeanFactoryAware, SmartIniti
                     .getDefaultMQPushConsumerImpl()
                     .registerConsumeMessageHook(this.consumeMessageTraceHook);
 
-            log.debug("beanName:{}, add ConsumeMessageHook", beanName);
+            log.info("beanName:{}, add ConsumeMessageHook", beanName);
 
         }
 
