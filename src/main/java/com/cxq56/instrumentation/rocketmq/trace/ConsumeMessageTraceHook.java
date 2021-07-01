@@ -4,14 +4,17 @@ import brave.Span;
 import brave.Tracing;
 import brave.propagation.ThreadLocalSpan;
 import brave.propagation.TraceContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeReturnType;
 import org.apache.rocketmq.client.hook.ConsumeMessageContext;
 import org.apache.rocketmq.client.hook.ConsumeMessageHook;
+import org.apache.rocketmq.common.MixAll;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @program: brave-instrumentation-spring-rocketmq
@@ -60,16 +63,35 @@ public class ConsumeMessageTraceHook implements ConsumeMessageHook {
     public void consumeMessageAfter(ConsumeMessageContext context) {
 
         Span span = null;
+
+        RuntimeException error = null;
+
         try {
             span = threadLocalSpan.remove();
 
             context.getProps().forEach(span::tag);
 
+            String consumeResult = context.getProps().get(MixAll.CONSUME_CONTEXT_TYPE);
+
+            if (! Objects.equals(consumeResult, String.valueOf(ConsumeReturnType.SUCCESS))
+                    && ! Objects.equals(consumeResult, String.valueOf(ConsumeReturnType.RETURNNULL))) {
+
+                error = new RuntimeException(consumeResult);
+            }
+
         } catch (Exception e) {
             log.error("consumeMessageAfter error!", e);
         } finally {
+
             if (span != null) {
-                span.finish();
+
+                if (Objects.isNull(error)) {
+
+                    span.finish();
+
+                } else {
+                    span.error(error).finish();
+                }
             }
         }
     }
